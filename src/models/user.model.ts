@@ -1,5 +1,5 @@
 import User from '../types/user.type';
-import DB from '../database';
+import DB from '../database/database';
 import config from '../config';
 import bcrypt from 'bcrypt';
 
@@ -18,15 +18,12 @@ class UserModel {
   async create(u: User): Promise<User> {
     try {
       const connection = await DB.connect();
-      const sql =
-        'INSERT INTO users (email , user_name, first_name, last_name, password ) VALUES ($1,$2,$3,$4,$5) returning id, email , user_name, first_name, last_name';
-      const result = await connection.query(sql, [
-        u.email,
-        u.user_name,
-        u.first_name,
-        u.last_name,
-        hashPass(u.password as string),
-      ]);
+        const sql = 'INSERT INTO users ( first_name, last_name, password ) VALUES ($1,$2,$3) returning id,first_name, last_name';
+        const result = await connection.query(sql, [
+          u.first_name,
+          u.last_name,
+          hashPass(u.password as string),
+        ]);
       connection.release();
       return result.rows[0];
     } catch (err) {
@@ -35,7 +32,7 @@ class UserModel {
     }
   }
   // Get All Users
-  async getUsers(): Promise<User[]> {
+  async index(): Promise<User[]> {
     try {
       const connection = await DB.connect();
       const sql = 'SELECT * FROM users;';
@@ -47,7 +44,7 @@ class UserModel {
     }
   }
   // Get a Specific User
-  async getSpecific(id: string): Promise<User> {
+  async show(id: string): Promise<User> {
     try {
       const connection = await DB.connect();
       const sql = 'SELECT * FROM users where id = $1;';
@@ -58,58 +55,14 @@ class UserModel {
       throw new Error('Unable to Get User with id : ' + id);
     }
   }
-  // Update User
-  async updateOne(u: User): Promise<User> {
-    try {
-      const connection = await DB.connect();
-      const sql = `UPDATE users 
-        SET email=$1, user_name=$2, first_name=$3,
-        last_name=$4, password=$5 WHERE id=$6 returning *
-        `;
-      const result = await connection.query(sql, [
-        u.email,
-        u.user_name,
-        u.first_name,
-        u.last_name,
-        hashPass(u.password as string),
-        u.id,
-      ]);
-      connection.release();
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(`'Unable to Update User'
-         ${u.first_name}: ${(err as Error).message} `);
-    }
-  }
-  // Delete User
-  async deleteOne(u: User): Promise<User> {
-    try {
-      const connection = await DB.connect();
-      const sql = `DELETE FROM users 
-        WHERE id=$1 returning *
-        `;
-      const result = await connection.query(sql, [
-        u.email,
-        u.user_name,
-        u.first_name,
-        u.last_name,
-        u.password,
-        u.id,
-      ]);
-      connection.release();
-      return result.rows[0];
-    } catch (err) {
-      throw new Error(`Unable to DELETE User
-         ${u.first_name}: ${(err as Error).message} `);
-    }
-  }
+
   // Authenticate User
 
-  async Authentication(email: string, password: string): Promise<User | null> {
+  async Authentication(first_name: string, password: string): Promise<User | null> {
     try {
       const connection = await DB.connect();
-      const sql = 'SELECT password FROM users WHERE email=$1';
-      const result = await connection.query(sql, [email]);
+      const sql = 'SELECT password FROM users WHERE first_name=$1';
+      const result = await connection.query(sql, [first_name]);
       if (result.rows.length > 0) {
         const { password: hashedPass } = result.rows[0];
         const isPasswordValid = bcrypt.compareSync(
@@ -118,8 +71,8 @@ class UserModel {
         );
         if (isPasswordValid) {
           const userInfo = await connection.query(
-            'SELECT id,user_name,email,first_name,last_name,password FROM users WHERE email=$1',
-            [email]
+            'SELECT id,first_name,last_name,password FROM users WHERE id=$1',
+            [first_name]
           );
           return userInfo.rows[0];
         }
@@ -127,8 +80,8 @@ class UserModel {
       connection.release();
       return null;
     } catch (error) {
-      throw new Error(`Cannot Authenticate the email: 
-         ${email}: ${(error as Error).message} `);
+      throw new Error(`Cannot Authenticate user : 
+         ${first_name}: ${(error as Error).message} `);
     }
   }
 }
