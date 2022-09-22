@@ -36,6 +36,11 @@ export const create = async (
             message: 'Product Created Successfully',
         });
     } catch (error) {
+        res.status(400)
+        res.json({
+            status: 'Failed',
+            message: 'Unable To Create a Product',
+        })
         next(error);
     }
 };
@@ -52,6 +57,9 @@ export const show = async (
             ...product,
         });
     } catch (error) {
-        next(error);
+        res.status(404).json({
+            status: 'Failed',
+            message: 'There is no Product with this ID',
+        })
     }
 };

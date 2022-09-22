@@ -30,11 +30,14 @@ const express_1 = require("express");
 const controllers = __importStar(require("../../controllers/users.controller"));
 const authenticate_middleware_1 = __importDefault(require("../../middlewares/authenticate.middleware"));
 const routes = (0, express_1.Router)();
-routes.route('/:id').delete(controllers.deleteOne).patch(controllers.update);
 routes
     .route('/')
-    .get(authenticate_middleware_1.default, controllers.getUsers)
+    .get(authenticate_middleware_1.default, controllers.index)
     .post(controllers.create);
-// authentication
-routes.route('/auth').post(controllers.auth);
+routes
+    .route('/:id')
+    .get(authenticate_middleware_1.default, controllers.show);
+routes
+    .route('/auth')
+    .get(controllers.auth);
 exports.default = routes;

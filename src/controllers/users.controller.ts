@@ -19,7 +19,7 @@ export const create = async (
       message: 'User Created Successfully',
     });
   } catch (error) {
-    res.json({
+    res.status(400).json({
       status: 'faild',
       message: 'Unable to create user',
     });

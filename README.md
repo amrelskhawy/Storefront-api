@@ -27,5 +27,9 @@ There are three Endpoints :
    - create "/api/users" [GET]
    - index "/api/users" [POST] ( token required ) 
    - show "/api/users/:id" [GET] ( token required )
-2. products ( token required )
-3. orders ( token required )
+2. products 
+    - Index 
+   - Show
+   - Create [token required]
+3. orders 
+   - Current Order by user (args: user id)[token required]

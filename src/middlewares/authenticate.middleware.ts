@@ -16,9 +16,7 @@ const validateTokenMiddleware = (
 ) => {
   try {
     // get authHeader
-    const authHeader = req.get('Authorization');
-    console.log(authHeader);
-    
+    const authHeader = req.get('Authorization');    
     if (authHeader) {
       const bearer = authHeader.split(' ')[0].toLowerCase();
       const token = authHeader.split(' ')[1];
@@ -28,10 +26,7 @@ const validateTokenMiddleware = (
           config.tokenSecret as unknown as string
         );
         if (decode) {
-          console.log(decode);
           next();
-          
-          
         } else {
           // failed to authenticate user
           handleUnauthorizedError(next);

@@ -11,9 +11,9 @@ routes
   .get(validateTokenMiddleware, controllers.index)
   .post(controllers.create);
 
-// routes
-// .route('/:id')
-// .get(controllers.show)
+routes
+.route('/:id')
+.get(validateTokenMiddleware,controllers.show)
 
 
 routes
