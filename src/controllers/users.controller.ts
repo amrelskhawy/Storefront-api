@@ -59,35 +59,27 @@ export const show = async (
 };
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
-  const {first_name , password} = req.body
-  const user= await userModel.Authentication(first_name, password);
-  const accessToken = jwt.sign( {user}, config.tokenSecret as unknown as string)
-  res.json({accessToken: accessToken})
+  try {
+    const {first_name , password} = req.body
+    const user = await userModel.Authentication(first_name, password);
+    const token = jwt.sign({user}, config.tokenSecret as unknown as string)
+    if ( !user ) {
+      return res.status(401).json({
+        status: 'erorr',
+        message: 'the username and password do not match please try again',
+      })
+    }
+    return res.json({
+      status: 'success',
+      message: 'User Authenticate Successfully',
+    }) 
+    
+  } catch (error) {
+    return next(error)
+  }
+
+  
 }
-
-
-// export const auth = async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const { first_name, password } = req.body;
-
-//     const user = await userModel.Authentication(first_name, password);
-//     const token = jwt.sign({ user }, config.tokenSecret as unknown as string);
-//     if (!user) {
-//       return res.status(401).json({
-//         status: 'erorr',
-//         message: 'the username and password do not match please try again',
-//       });
-//     } else {
-//       return res.status(200).json({
-//         status: 'success',
-//         message: 'User Authenticated Successfully',
-//         data: { ...user, token },
-//       });
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // "email": "0542GEMY@hotmail.com",
 // "user_name": "modo1545",
