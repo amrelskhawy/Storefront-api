@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import User from '../types/user.type';
 import DB from '../database/database';
 import config from '../config';
@@ -18,12 +19,12 @@ class UserModel {
   async create(u: User): Promise<User> {
     try {
       const connection = await DB.connect();
-        const sql = 'INSERT INTO users ( first_name, last_name, password ) VALUES ($1,$2,$3) returning id,first_name, last_name';
-        const result = await connection.query(sql, [
-          u.first_name,
-          u.last_name,
-          hashPass(u.password as string),
-        ]);
+      const sql = 'INSERT INTO users ( first_name, last_name, password ) VALUES ($1,$2,$3) returning id,first_name, last_name';
+      const result = await connection.query(sql, [
+        u.first_name,
+        u.last_name,
+        hashPass(u.password as string),
+      ]);
       connection.release();
       return result.rows[0];
     } catch (err) {
@@ -35,7 +36,7 @@ class UserModel {
   async index(): Promise<User[]> {
     try {
       const connection = await DB.connect();
-      const sql = 'SELECT * FROM users;';
+      const sql = 'SELECT id, first_name, last_name FROM users;';
       const result = await connection.query(sql);
       connection.release();
       return result.rows;
@@ -56,32 +57,28 @@ class UserModel {
     }
   }
 
+
   // Authenticate User
 
   async Authentication(first_name: string, password: string): Promise<User | null> {
     try {
       const connection = await DB.connect();
-      const sql = 'SELECT password FROM users WHERE first_name=$1';
-      const result = await connection.query(sql, [first_name]);
-      if (result.rows.length > 0) {
-        const { password: hashedPass } = result.rows[0];
-        const isPasswordValid = bcrypt.compareSync(
-          `${password}${config.pepper}`,
-          hashedPass
-        );
-        if (isPasswordValid) {
+      const sql = 'SELECT password from users WHERE first_name=$1'
+      const result = await connection.query(sql, [first_name])
+      if (result.rows.length) {
+        const { password: hashedPass } = result.rows[0]
+        const isPassword = bcrypt.compareSync(`${password}${config.pepper}`, hashedPass)
+        if (isPassword) {
           const userInfo = await connection.query(
-            'SELECT id,first_name,last_name,password FROM users WHERE id=$1',
-            [first_name]
-          );
-          return userInfo.rows[0];
+            'SELECT id , first_name, last_name from users WHERE first_name=($1)'
+            , [first_name])
+          return userInfo.rows[0]
         }
       }
-      connection.release();
-      return null;
+      connection.release()
+      return null
     } catch (error) {
-      throw new Error(`Cannot Authenticate user : 
-         ${first_name}: ${(error as Error).message} `);
+      throw new Error('Unable To Login')
     }
   }
 }

@@ -2,6 +2,7 @@ import config from '../config';
 import { Request, Response, NextFunction } from 'express'; // Calculating
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.model';
+import User from '../types/user.type';
 
 const userModel = new UserModel();
 
@@ -18,7 +19,10 @@ export const create = async (
       message: 'User Created Successfully',
     });
   } catch (error) {
-    next(error);
+    res.json({
+      status: 'faild',
+      message: 'Unable to create user',
+    });
   }
 };
 
@@ -31,7 +35,7 @@ export const index = async (
     const user = await userModel.index();
     res.json({
       status: 'Success',
-      data: { ...user },
+      data: { ...user},
       message: 'All Users Are here',
     });
   } catch (error) {
@@ -47,19 +51,26 @@ export const show = async (
   try {
     const user = await userModel.show(req.params.id);
     res.json({
-      ...user,
+      ...user
     });
   } catch (error) {
     next(error);
   }
 };
 
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
+  const {first_name , password} = req.body
+  const user= await userModel.Authentication(first_name, password);
+  const accessToken = jwt.sign( {user}, config.tokenSecret as unknown as string)
+  res.json({accessToken: accessToken})
+}
+
 
 // export const auth = async (req: Request, res: Response, next: NextFunction) => {
 //   try {
-//     const { email, password } = req.body;
+//     const { first_name, password } = req.body;
 
-//     const user = await userModel.Authentication(email, password);
+//     const user = await userModel.Authentication(first_name, password);
 //     const token = jwt.sign({ user }, config.tokenSecret as unknown as string);
 //     if (!user) {
 //       return res.status(401).json({

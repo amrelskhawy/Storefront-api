@@ -44,4 +44,4 @@ const validateTokenMiddleware = (
   }
 };
 
-export default validateTokenMiddleware;
+// export default validateTokenMiddleware;

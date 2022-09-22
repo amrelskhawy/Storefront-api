@@ -10,5 +10,14 @@ routes
   .get(controllers.index)
   .post(controllers.create);
 
+// routes
+// .route('/:id')
+// .get(controllers.show)
+
+
+routes
+  .route('/auth')
+  .get(controllers.auth)
+
 
 export default routes;
