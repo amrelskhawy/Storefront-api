@@ -8,7 +8,7 @@ const routes = Router();
 
 routes
   .route('/:id')
-  .get(validateTokenMiddleware , controllers.index)
+  .get(validateTokenMiddleware , controllers.show)
 
 
 export default routes;
