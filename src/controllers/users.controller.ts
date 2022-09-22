@@ -71,6 +71,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
     return res.json({
       status: 'success',
+      data: {...user , token},
       message: 'User Authenticate Successfully',
     }) 
     
