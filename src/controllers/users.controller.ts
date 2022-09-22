@@ -78,12 +78,4 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     return next(error)
   }
-
-  
 }
-
-// "email": "0542GEMY@hotmail.com",
-// "user_name": "modo1545",
-// "first_name": "Mohamed",
-// "last_name": "Gamal",
-// "password": "702648415****"
