@@ -48,9 +48,7 @@ export const show = async (
 ) => {
   try {
     const user = await newUser.show(req.params.id);
-    res.json({
-      ...user
-    });
+    res.json({...user});
   } catch (error) {
     next(error);
   }
