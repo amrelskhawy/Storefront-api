@@ -1,5 +1,8 @@
 # Schema
 
+![image](https://user-images.githubusercontent.com/68334383/192117891-2bbaf489-1ec4-4ada-9cf2-d5eb6953e126.png)
+
+
 ## API Endpoints
 1. users 
    - create "/api/users" [GET]
