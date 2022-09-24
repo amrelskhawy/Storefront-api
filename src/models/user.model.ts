@@ -10,10 +10,6 @@ const hashPass = (plainPass: string): string => {
   return bcrypt.hashSync(`${plainPass}${config.pepper}`, salt);
 };
 
-const compare = (plainPass: string, hashedPass: string) => {
-  return bcrypt.compareSync(plainPass as string, hashPass(plainPass));
-};
-
 class UserModel {
   // Create New User
   async create(u: User): Promise<User> {
@@ -28,8 +24,7 @@ class UserModel {
       connection.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`'Unable to create User'
-         ${u.first_name}: ${(err as Error).message} `);
+      throw new Error(`Unable to create User ${u.first_name}: ${(err as Error).message} `);
     }
   }
   // Get All Users

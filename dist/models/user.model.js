@@ -10,9 +10,6 @@ const hashPass = (plainPass) => {
     const salt = parseInt(config_1.default.salt_rounds, 10);
     return bcrypt_1.default.hashSync(`${plainPass}${config_1.default.pepper}`, salt);
 };
-const compare = (plainPass, hashedPass) => {
-    return bcrypt_1.default.compareSync(plainPass, hashPass(plainPass));
-};
 class UserModel {
     // Create New User
     async create(u) {
@@ -28,8 +25,7 @@ class UserModel {
             return result.rows[0];
         }
         catch (err) {
-            throw new Error(`'Unable to create User'
-         ${u.first_name}: ${err.message} `);
+            throw new Error(`Unable to create User ${u.first_name}: ${err.message} `);
         }
     }
     // Get All Users

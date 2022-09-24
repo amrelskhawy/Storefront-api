@@ -35,9 +35,9 @@ routes
     .get(authenticate_middleware_1.default, controllers.index)
     .post(controllers.create);
 routes
-    .route('/:id')
-    .get(authenticate_middleware_1.default, controllers.show);
-routes
     .route('/auth')
     .get(controllers.auth);
+routes
+    .route('/:id')
+    .get(authenticate_middleware_1.default, controllers.show);
 exports.default = routes;
