@@ -1,16 +1,24 @@
 # Storefront Backend Project
 
 ## Getting Started
+<br>
 
-to Migrate the DATABASE run :
+1. install Necessary Modules with
+```
+npm run migration
+``` 
+2. Setup the Database
+3. Add .env to your project ( At the Root Folder )
+4. Add database.json file ( At the Root Folder )
+5. Migrate the DATABASE run :
 ```
 npm run migration
 ```
-to start the project run : 
+6. start the project run : 
 ```
 npm run start
 ```
-you can test the project by Running:
+## Testing the project by Running:
 ```
 npm run test
 ```
@@ -34,3 +42,61 @@ There are three Endpoints :
    - Create [token required]
 3. orders 
    - Current Order by user (args: user id)[token required]
+
+
+## Schemas 
+
+
+
+## ENVIRONMENT VARIABLES FILE
+```
+PORT=3000
+NODE_ENV=dev
+
+POSTGRES_HOST=localhost
+POSTGRES_PORT=8000
+POSTGRES_DB=ecommerce
+POSTGRES_DB_TEST=store_test
+POSTGRES_USER=postgres
+POSTGRES_PASS=root
+BCRYPT_PASSWORD=your-secret
+SALT_ROUNDS=10
+TOKEN_SECRET=your-secret-token
+```
+
+## Database.json config file
+```
+{
+    "defaultEnv": {"ENV": "NODE_ENV"},
+    "dev" : {
+        "driver": "pg",
+        "host": {"ENV": "POSTGRES_HOST"},
+        "port": {"ENV": "POSTGRES_PORT"},
+        "database": {"ENV": "POSTGRES_DB"},
+        "user": {"ENV": "POSTGRES_USER"},
+        "password": {"ENV": "POSTGRES_PASS"}
+    }, "test" : {
+        "driver": "pg",
+        "host": {"ENV": "POSTGRES_HOST"},
+        "port": {"ENV": "POSTGRES_PORT"},
+        "database": {"ENV": "POSTGRES_DB_TEST"},
+        "user": {"ENV": "POSTGRES_USER"},
+        "password": {"ENV": "POSTGRES_PASS"}
+    }
+}
+```
+
+## Database Setup
+```
+-- create DB to work with:
+CREATE DATABASE ecommerce;
+CREATE DATABASE store_test;
+
+-- create User:
+CREATE USER postgres WITH PASSWORD 'root';
+
+-- to grant privileages
+GRANT ALL PRIVILEAGES ON DATABASE 'ecommerce' TO postgres;
+GRANT ALL PRIVILEAGES ON DATABASE 'store_test' TO postgres;
+
+```
