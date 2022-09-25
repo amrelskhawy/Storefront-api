@@ -9,11 +9,12 @@
    - index "/api/users" [POST] ( token required ) 
    - show "/api/users/:id" [GET] ( token required )
 #### 2. products 
-   - Index 
-   - Show
-   - Create [token required]
+   - Index [GET]
+   - Show [GET]
+   - Create [POST] (token required)
 #### 3. orders 
-   - Current Order by user (args: user id)[token required]
+   - Current Order by user [GET] (args: user id)[token required]
+   - Create [POST] (token required)
 
 
 ## Data Shapes

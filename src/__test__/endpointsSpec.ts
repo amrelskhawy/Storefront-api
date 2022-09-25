@@ -57,9 +57,9 @@ describe('API endpoint tests', () => {
             const response = await request.post('/api/orders')
             expect(response.status).toBe(404);
         });
-        it('expects to return 401', async () => {
+        it('expects to return 404', async () => {
             const response = await request.get('/api/orders/2')
-            expect(response.status).toBe(401);
+            expect(response.status).toBe(404);
         });
     });
 });
