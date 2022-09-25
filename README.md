@@ -44,10 +44,6 @@ There are three Endpoints :
    - Current Order by user (args: user id)[token required]
 
 
-## Schemas 
-
-
-
 ## ENVIRONMENT VARIABLES FILE
 ```
 PORT=3000
@@ -84,19 +80,4 @@ TOKEN_SECRET=your-secret-token
         "password": {"ENV": "POSTGRES_PASS"}
     }
 }
-```
-
-## Database Setup
-```
--- create DB to work with:
-CREATE DATABASE ecommerce;
-CREATE DATABASE store_test;
-
--- create User:
-CREATE USER postgres WITH PASSWORD 'root';
-
--- to grant privileages
-GRANT ALL PRIVILEAGES ON DATABASE 'ecommerce' TO postgres;
-GRANT ALL PRIVILEAGES ON DATABASE 'store_test' TO postgres;
-
 ```
